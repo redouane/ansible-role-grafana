@@ -1,0 +1,26 @@
+---
+
+- name: grafana install check
+  command: dpkg-query -l grafana
+  register: grafana_install_check
+  failed_when: grafana_install_check.rc > 1
+  changed_when: grafana_install_check.rc == 1
+
+- name: download grafana
+  get_url:
+    url=https://grafanarel.s3.amazonaws.com/builds/grafana_{{ grafana_version }}_amd64.deb
+    dest=/tmp/grafana_{{ grafana_version }}_amd64.deb
+    mode=0440
+  when: grafana_install_check.rc == 1
+
+- name: install grafana package
+  apt:
+    deb=/tmp/grafana_{{ grafana_version }}_amd64.deb
+  when: grafana_install_check.rc == 1
+
+- name: configure grafana
+  template:
+    src=grafana.ini.j2
+    dest=/etc/grafana/grafana.ini
+  notify:
+  - restart grafana
