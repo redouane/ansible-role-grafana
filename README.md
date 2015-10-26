@@ -1,6 +1,8 @@
 Ansible Role: Grafana
 =====================
 
+[![Build Status](https://travis-ci.org/redouane/ansible-role-grafana.svg?branch=master)](https://travis-ci.org/redouane/ansible-role-grafana)
+
 Installs and configures grafana
 
 Requirements
